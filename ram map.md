@@ -51,7 +51,7 @@
 |FNRV            |0x14            |7               |1               |                |
 |AOUF            |0x15            |0               |1               |                |
 |GFXF            |0x15            |1               |1               |                |
-|ITSM            |0x15            |2               |3               | Likely preformence mod |
+|ITSM            |0x15            |2               |3               | Preformence mod. "Intelligent Cooling": 1, Power save: 2, "Extreme Performance": 4  |
 |DKIN            |0x16            |0               |1               |                |
 |DKPW            |0x16            |1               |1               |                |
 |DKRS            |0x16            |2               |1               |                |

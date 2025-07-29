@@ -3,12 +3,37 @@ Convert the ram map into markdown
 """
 
 from dataclasses import dataclass
+import math
 
 @dataclass
 class Field:
 	name : str
 	bit_len : int
 	bit_offset : int
+
+	def extract_from(self, arr : bytearray) -> bytes:
+		ecram_int = int.from_bytes(arr, byteorder='little')
+		ecram_int >>= self.bit_offset
+		ecram_int &= (1 << self.bit_len) - 1
+
+		return ecram_int.to_bytes(math.ceil(self.bit_len / 8), byteorder='little')
+	def gen_patched_bytes(self, arr : bytearray, value : bytes) -> bytes:
+		ecram_int = int.from_bytes(arr, byteorder='little')
+
+		value_int = int.from_bytes(value, byteorder='little')
+		if value_int.bit_length() > self.bit_len:
+			raise ValueError("Value too large for field")
+
+		value_int <<= self.bit_offset
+
+
+		val_mask = ( (1 << self.bit_len) - 1 ) << self.bit_offset
+
+		ecram_int &= ~val_mask
+		ecram_int |= value_int
+
+		return ecram_int.to_bytes(len(arr), byteorder='little')
+
 
 def load(path : str) -> list[Field]:
 	f = open(path, "r")
