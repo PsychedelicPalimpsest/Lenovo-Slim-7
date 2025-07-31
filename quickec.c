@@ -3,7 +3,6 @@ QuickEc editing program.
 This file is part of: https://github.com/PsychedelicPalimpsest/Lenovo-Slim-7
 
 
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -42,7 +41,7 @@ struct EcRamField {
 
 const struct EcRamField fields[] = {
 	{ /*ITSM*/ "preformence_mode", 0x15, 2, 3, true },
-	{ /*BKLC*/ "backlight_control", 0x11, 2, 1, true}
+	{ /*BKLC*/ "backlight_control", 0x11, 2, 1, true},
 	// { "lid_status", 0x10, 0, 1, false },
 	{ /*ACIN*/ "plugged_in", 0x80, 0, 1, false},
 	{ /*RSOC*/ "charge", 0x92, 0, 8, false},
