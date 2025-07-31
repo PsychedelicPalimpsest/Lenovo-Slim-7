@@ -1,0 +1,58 @@
+#!/bin/python
+
+import mmap
+import os, sys
+import struct
+
+# laptop specific memory address for ec ram
+phys_addr = 0xFE0B0300
+length = 0xFF
+pagesize = mmap.PAGESIZE  # usually 0x1000 (4096)
+page_base = phys_addr & ~(pagesize - 1)
+page_offset = phys_addr - page_base
+
+modes = {
+    "pow_mode": {
+        "byte off": 0x15,
+        "inner off": 2,
+        "bit size": 3
+    }
+}
+
+with open("/dev/mem", "r+b") as f:
+    mm = mmap.mmap(f.fileno(), page_offset + length, offset=page_base)
+    data = bytearray(mm[page_offset:page_offset + length])  # mutable
+    if __name__ == "__main__":
+        if len(sys.argv) == 1 or sys.argv[1] not in modes:
+            print(r"Fast EC editor. Syntax: fastec {mode} {get/set} [value]")
+            print("Supported modes:")
+            for k in modes:
+                print(f"\t{k}")
+            exit(1)
+
+        mode = modes[sys.argv[1]]
+        assert sys.argv[2] in ("get", "set")
+
+        if sys.argv[2] == "get":
+            val = data[mode["byte off"]] >> mode["inner off"]
+            val &= (1 << mode["bit size"]) - 1
+            print(val)
+
+        if sys.argv[2] == "set":
+            assert len(sys.argv) == 4
+            value = int(sys.argv[3])
+            if value >= (1 << mode["bit size"]):
+                raise ValueError("Value too large to fit in field")
+
+            byte_off = mode["byte off"]
+            bit_off = mode["inner off"]
+            bit_size = mode["bit size"]
+
+            mask = ((1 << bit_size) - 1) << bit_off
+            data[byte_off] &= ~mask  # clear bits
+            data[byte_off] |= (value << bit_off) & mask  # set bits
+
+            # write back modified slice
+            mm[page_offset:page_offset + length] = data
+
+    mm.close()

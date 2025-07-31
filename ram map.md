@@ -28,7 +28,7 @@
 |LDRV            |0x10            |6               |2               |                |
 |LDSW            |0x11            |0               |1               |                |
 |ISTD            |0x11            |1               |1               |???? IBSM == One IEPM == One : zero, one on "SET auto mode" |
-|BKLC            |0x11            |2               |1               |                |
+|BKLC            |0x11            |2               |1               |Backlight control. Zero = on, One = off                |
 |LESR            |0x11            |3               |1               |???? Set in \_SB_.WMIS. Zero if Arg1 == 0x03, One if Arg1 == 0x02|
 |BBAT            |0x11            |4               |1               |                |
 |IAPM            |0x11            |5               |1               |???? IBSM == One || IEPM == One : zero |

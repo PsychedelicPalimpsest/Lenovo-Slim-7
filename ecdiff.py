@@ -129,15 +129,18 @@ def loadf(path : str):
 	return parse(data)
 
 if __name__ == "__main__":
-	og = loadf("ecdumps/preformence1.bin")
-	reduction_glob(og, "ecdumps/preformence*.bin")
-	pref = loadf("ecdumps/icool2_stressish.bin")
-	selection_diff(og, pref)
+	on = loadf("ecdumps/led_on.bin")
 
-	print("pref:")
-	fancy_print(og, 1)
-	print("icool:")
-	fancy_print(pref, 1)
+	off = loadf("ecdumps/led_off.bin")
+	reduction_diff(off, loadf("ecdumps/led_off2.bin"))
+	selection_diff(off, on)
+
+
+	print("off:")
+	fancy_print(off, 1)
+	print("on:")
+	fancy_print(on, 1)
+
 	
 	
 	
